@@ -71,7 +71,9 @@ static const char *lock[]  = { "lock",  NULL };
 static const char *scr[]  = { "scr", NULL };
 static const char *rec[]  = { "rec", NULL };
 static const char *audio[]  = { "st", "alsamixer", NULL };
-static const char *files[]  = { "pcmanfm",  NULL };
+static const char *files[]  = { "dfm",  NULL };
+static const char *todo[]  = { "todo",  NULL };
+static const char *passmenu[]  = { "passmenu",  NULL };
 static const char *br_up[]  = { "brightnessctl", "set", "10%+", NULL };
 static const char *br_down[]  = { "brightnessctl", "set", "10%-", NULL };
 static const char *au_up[]  = { "amixer", "set", "Master", "10%+", NULL };
@@ -91,6 +93,8 @@ static const Key keys[] = {
 	{ MODKEY,						XK_w,      spawn,          {.v = web } },
 	{ ControlMask|Mod1Mask,			XK_l,      spawn,          {.v = lock } },
 	{ MODKEY,						XK_e,      spawn,          {.v = files } },
+	{ MODKEY,						XK_t,      spawn,          {.v = todo } },
+	{ MODKEY,						XK_s,      spawn,          {.v = passmenu } },
 	{ MODKEY,						XK_a,      spawn,          {.v = audio } },
 	{ 0,							0x1008ff03,spawn,          {.v = br_down } },
 	{ 0,							0x1008ff02,spawn,          {.v = br_up } },
@@ -118,9 +122,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,						XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_z,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_x,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },

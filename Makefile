@@ -20,7 +20,8 @@ configure:
 		sx imlib2-dev libxft-dev pango-dev fontconfig-dev \
 		xrdb libexif-dev freetype-dev patch gcc pkgconf \
 		harfbuzz-dev libxcb-dev libx11-dev xcb-util-dev \
-		cairo-dev ncurses g++ libxinerama-dev xf86-input-synaptics
+		cairo-dev ncurses g++ libxinerama-dev \
+		xf86-input-synaptics font-jetbrains-mono 
 	doas usermod -aG sys $(USER)
 	doas usermod -aG adm $(USER)
 	doas usermod -aG input $(USER)
@@ -29,12 +30,9 @@ configure:
 programs:
 	doas apk add vim cmus git zathura zathura-pdf-poppler \
 		zathura-cb alsa-utils playerctl \
-		brightnessctl pcmanfm font-jetbrains-mono \
-		font-jetbrains-mono-nerd font-noto font-noto-cjk \
-		font-noto-emoji font-noto-extra yt-dlp mpv \
+		brightnessctl font-jetbrains-mono-nerd yt-dlp mpv \
 		mpv-mpris xclip fzf exfatprogs curl wget htop \
-		gsettings-desktop-schemas bash-completion \
-		xdg-utils xdg-user-dirs
+		bash-completion xdg-utils xdg-user-dirs
 copy-config:
 	cp -r .config ~/
 	cp -r .local ~/
