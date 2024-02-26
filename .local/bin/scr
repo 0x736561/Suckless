@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+xscreenshot > ~/scr.ff
+ff2png < ~/scr.ff > ~/$(date '+%d-%m-%y_%H:%M:$S')\.png
+rm ~/scr.ff
+

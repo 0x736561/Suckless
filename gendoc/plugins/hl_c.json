@@ -1,0 +1,36 @@
+/*
+ * plugins/hl_c.json
+ *
+ * Copyright (C) 2022 bzt (bztsrc@gitlab)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @brief Syntax highlight rules for the C language
+ *
+ */
+[
+    /* 0 comments */    [ "\/\/.*?$", "\/\*.*?\*\/" ],
+    /* 1 pseudo */      [ "#.*?$" ],
+    /* 2 operators */   [ "\->", "<<=", ">>=", "<<", ">>", "\+\+", "\-\-", "&&", "\|\|", "[=<>\+\-\*\/%~&\^\|!]=", "[=<>\+\-\*\/%~&\^\|!\?:\.]" ],
+    /* 3 numbers */     [ "[\-]?[0-9][0-9bx]?[0-9\.a-fp]*[UL]*" ],
+    /* 4 strings */     [ "\"", "'", "L\"", "L'" ],
+    /* 5 separators */  [ "[", "]", "{", "}", ",", ";", ":" ],
+    /* 6 types */       [ "signed", "unsigned", "char", "short", "int", "long", "float", "double", "true", "false", "null", "nullptr",
+                          "enum", "struct", "typedef", "static", "inline", "register", "wchar_t", "int8_t", "int16_t", "int32_t", "int64_t",
+                          "uint8_t", "uint16_t", "uint32_t", "uint64_t", "intptr_t", "wchar_t", "size_t", "ssize_t", "off_t", "ino_t",
+                          "dev_t", "gid_t", "uid_t", "mode_t", "nlink_t", "pid_t", "time_t", "addr_t", "str_t", "void" ],
+    /* 7 keywords */    [ "if", "else", "switch", "case", "default", "for", "while", "do", "break", "continue", "return", "goto", "sizeof",
+                          "volatile", "asm" ]
+]

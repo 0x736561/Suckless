@@ -1,0 +1,3 @@
+#!/bin/sh
+FILE=$1
+curl -F"file=@$FILE" -Fsecret= https://0x0.st

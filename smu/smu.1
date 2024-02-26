@@ -1,0 +1,32 @@
+.Dd May 13, 2021
+.Dt SMU 1
+.Os
+.Sh NAME
+.Nm smu
+.Nd simple markup
+.Sh SYNOPSIS
+.Nm
+.Op Fl h
+.Op Fl l
+.Op Fl n
+.Op Fl v
+.Op Ar file
+.Sh DESCRIPTION
+.Nm
+is a simple interpreter for a simplified Markdown dialect.
+When a
+.Ar file
+is specified it will read from the file, otherwise it reads from stdin.
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl h
+Prints usage information to stderr, then exits.
+.It Fl l
+Set loading="lazy" hint attribute for images if it has a width and a height.
+.It Fl n
+Escapes all HTML tags.
+.It Fl v
+Prints version information to stderr, then exits.
+.El
+.Sh EXIT STATUS
+.Ex -std

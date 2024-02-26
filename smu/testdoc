@@ -1,0 +1,155 @@
+smu test
+========
+
+simple tests
+------------
+
+first paragraph.
+testing surround: _emph_ then **strong** and `code`.
+
+`\`escaped backticks\``.
+
+`x = *y * 6;`
+
+horizontal rule:
+
+- - -
+
+---
+
+
+blocks and entities
+-------------------
+
+preformatted block:
+	.'''' .'.'. |  |
+	 '''. | ' | |  |
+	''''  '   '  ""
+
+quoted text:
+> When in doubt,
+> use brute force.
+
+list:
+* Make each program do one thing well.
+* Expect the output of every program to become the input to another,
+as yet unknown, program.
+* Design and build software, even operating systems, to be tried early,
+ideally within weeks.
+* Use tools in preference to unskilled help to lighten a programming task.
+
+list in list:
+* a
+  * b
+    1. c
+    2. d
+  * e
+* f
+
+entity: &, <, >
+
+code:
+	int powerof2(unsigned int n) {
+		return !((n - 1) & n) && n > 0;
+	}
+
+links
+-----
+
+link: [suckless](http://suckless.org/)
+
+link with title: [suckless](http://suckless.org/ "software that sucks less")
+
+link with title (single quote): [suckless](http://suckless.org/ 'software that sucks less')
+
+link with trailing spaces: [suckless](http://suckless.org/    )
+
+link with leading spaces: [suckless](     http://suckless.org/    )
+
+link with (): (see [RFC8259 - 8.1. Character Encoding](https://tools.ietf.org/html/rfc8259#section-8.1)).
+
+link with entities: [link](https://codemadness.org/?bla=2&bla2="3")
+
+link with empty title: [link](http://a "")
+
+link with spaces in URL: [link](http://a/b c)
+
+link with image dimensions (should be ignored): [link](http://a/b =2x2)
+
+images
+------
+
+image: ![](http://st.suckless.org/screenshots/20h-2012-s.png)
+
+image with alt text: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png)
+
+image with title: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "screenshot of st")
+
+image with title (single quote): ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png 'screenshot of st')
+
+image with unclosed title (single quote): ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "screenshot of st)
+
+image with no title and dimensions: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png =12x34)
+
+image with title and dimensions: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "screenshot of st" =12x34)
+
+image with title and dimensions different order: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png =12x34 "screenshot of st")
+
+image with title and dimensions (no width): ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "screenshot of st" =x34)
+
+image with title and dimensions (no height): ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "screenshot of st" =12x)
+
+image with title and dimensions with spaces: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png
+	=12x34    
+	"screenshot of st"    )
+
+image with empty title: ![alt text](http://st.suckless.org/screenshots/20h-2012-s.png "")
+
+linked thumbnail image: [![alt text](thumb.png "click to open" =12x34)](img.png)
+
+inline html
+-----------
+
+<center>
+	ABC
+</center>
+
+
+titles
+------
+
+h1 no need to match exactly
+===
+
+h2 no need to match exactly
+---
+
+h1 no need to match exactly
+=
+
+h2 no need to match exactly
+-
+
+this one is not a title
+ -
+
+## title
+- a
+
+## title
+-- a
+
+## title
+--
+
+a
+-
+
+aa
+--
+
+abc
+---
+
+abc
+----------

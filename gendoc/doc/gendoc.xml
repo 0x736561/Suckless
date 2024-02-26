@@ -1,0 +1,722 @@
+<!--
+  to be used with gendoc, like this:
+  ./gendoc gendoc.html gendoc.xml
+-->
+<doc>
+    <title>gendoc</title>
+    <url>https://bztsrc.gitlab.io/gendoc</url>
+    <version>1.0.0</version>
+    <theme>theme.css</theme>
+    <lang>en</lang>
+    <rslt>Search Results</rslt>
+    <home>Home</home>
+    <link>Permalink to this headline</link>
+    <info>Important</info>
+    <hint>Hint</hint>
+    <note>Note</note>
+    <also>See Also</also>
+    <todo>To Do</todo>
+    <args>Arguments</args>
+    <rval>Return Value</rval>
+    <warn>Warning</warn>
+    <prev>Previous</prev>
+    <next>Next</next>
+    <copy>2022 bzt (bztsrc@gitlab)</copy>
+</doc>
+
+<hello>
+<h1>Welcome to gendoc!</h1>
+<p>The <b>gendoc</b> tool is a small tool that generates documentation into a formatted static HTML. It is similar to Sphinx
+and ReadtheDocs, but much better and way cooler, because it has no server component parts and works without JavaScript too.</p>
+<hint>This documentation is short, a LOT shorter that RtD's. This isn't because I was lazy to write it, but because <b>gendoc</b>
+is really simple to use! You know, "Keep it Simple, Stupid!"</hint>
+<h2>Advantages</h2>
+<ul>
+<li>Available as an ANSI C tool as well as a PHP script (both dependency-free).</li>
+<li>Looks like, feels like ReadtheDocs, but it works without internet connection too.</li>
+<li>Unlike Sphinx, <b>gendoc</b> is easy to use, and generates a <i>single static file</i> (which <a https://validator.w3.org/nu?acceptlanguage=&doc=https%3A%2F%2Fbztsrc.gitlab.io%2Fgendoc>passes W3C's HTML5 validation</a> btw).</li>
+<li>The <b>gendoc</b> document is free of dependencies and external resources, no third party CSS nor webfonts required.</li>
+<li>Does not depend on jQuery or any other third party libraries and has no server component parts.</li>
+<li>You can download a <b>gendoc</b> document to your computer and use it as a local file, everything will work, even the search!</li>
+<li>It also works with JavaScript turned off! Everything (except the search) is based on CSS-only solutions.</li>
+<li>Much smaller and cleaner CSS + HTML than what Sphinx generates, using selectors instead of classnames whenever possible.</li>
+<li>A lot easier to theme than Sphinx, and the generated documentation has responsive design out-of-the-box.</li>
+<li>It includes a much better generic syntax highlighter than Sphinx, works with any language but you can add langauge-specific rules too</li>
+<li>Has a built-in API generation tool, but you can add plugins if you don't like its output format (which is pretty basic)</li>
+</ul>
+<h2>Disadvantages</h2>
+<ul>
+<li>Unlike RtD, <b>gendoc</b> does not provide hosting. But since docs are just single files and we have gitlab, github, etc. this
+isn't a real issue. (Maybe letting you have a copy of your own documentation and not taking it away from you into the cloud isn't a disadvantage at all...)</li>
+</ul>
+</hello>
+
+<cap>Common Topics</cap>
+<h1>Getting started</h1>
+<h2>Download</h2>
+<p>First things first, <a https://gitlab.com/bztsrc/gendoc>download the source or the script from the repo</a>. Both are single files,
+about 100 kilobytes each. Seriously, no dependencies (other than a php interpreter for the script of course). Everything is included
+<a https://suckless.org>suckless</a>ly.</p>
+<h2>Usage</h2>
+<p>For the ANSI C Version</p>
+<pre>
+$ gcc gendoc.c -o gendoc
+$ ./gendoc <output.html> <input file> [input file...]</pre>
+<p>And with the PHP version</p>
+<pre>$ php ./gendoc.php <output> <input file> [input file...]</pre>
+<h3>Output</h3>
+<p>The output's format is detected by the extension, and in lack of a writer plugin for that extension, defaults to a single,
+W3C valid, self-contained, dependency-free HTML5 file that you can take anywhere with you (just like the one you're reading now).</p>
+<p>The output of the ANSI C version and PHP version should be identical bit-to-bit (except if you have the php-gd extension
+installed, then the PHP version will transparently shrink the inlined images to save storage space).</p>
+<h3>Input Files</h3>
+<p>You can use one input file, or multiple files. It doesn't matter, <b>gendoc</b> will generate a single output file either
+way. You have full control in how you organize your source documents, it doesn't inflience the output (not like Sphinx).</p>
+<p>Input files likewise to the output, their format is detected by extension, and in lack of a reader plugin defaults to
+<b>gendoc</b> tags.</p>
+<note>The ANSI C version only reads <b>gendoc</b> tags and only generates into HTML5 output format, it does not support file format reader / writer plugins.
+It has a built-in filter to convert <a>MarkDown</a> into <b>gendoc</b> though, based on <a https://github.com/Gottox/smu>smu</a>. The PHP plugin uses an extended
+<a https://parsedown.org>ParseDown</a> class.</note>
+
+<h1>Creating Documents</h1>
+<p>You write simple text files, by default with tags similar to HTML, but MUCH MUCH simpler. You can also add <a>plugins</a> to support
+any input format, like ReadFirst or <a>MarkDown</a>. This documentation hereafter talks about the default <b>gendoc</b> tags format.</p>
+<p>There are two categories for the tags. The tags in the first one specify the meta and overall structure of the documentation.</p>
+<h2>Specifying Meta Info</h2>
+<p>These are enclosed in <tt><doc>...</doc></tt>. Pretty simple, they just specify some variable data and translated labels
+for the document, most notably for the <a>Alert Boxes</a>. The <tt><doc></tt> should be the first tag in the source
+documentation file. Its subtags are as follows:</p>
+<dl>
+<dt><tt><title>...</title></tt></dt><dd>Specifies the title of the document, shown at different places, on the top left and on the windowbar too for example</dd>
+<dt><tt><titleimg>(filename) ...</titleimg></tt></dt><dd>Optionally specify a title image. The filename is a path relative to
+the source document, and the remaining text after the space will be used as <tt>alt</tt> attribute as well as added to the title
+string as a prefix.</dd>
+<dt><tt><url>...</url></tt></dt><dd>The URL where the big title on the top left leads.</dd>
+<dt><tt><version>...</version></tt></dt><dd>The version string shown below the title on the top left.</dd>
+<dt><tt><theme>...</theme></tt></dt><dd>Specifies the name of the CSS file for <a>customizing theme</a> (and the theme only).</dd>
+<dt><tt><lang>...</lang></tt></dt><dd>The documentation's language in two letter ISO-639-1 format. Only informational, I don't
+think anybody cares what's in the HTML tag's lang attribute.</dd>
+<dt><tt><rslt>...</rslt></tt></dt><dd>The translated "Search Results" string.</dd>
+<dt><tt><home>...</home></tt></dt><dd>The translated "Home" string (tooltip for the breadcrumbs navigation above).</dd>
+<dt><tt><link>...</link></tt></dt><dd>The translated tooltip for the heading links, "Permalink to this heading".</dd>
+<dt><tt><info>...</info></tt></dt><dd>The translated header of the info type alerts, "Info" or "Important" or something.</dd>
+<dt><tt><note>...</note></tt></dt><dd>The translated header of the "Note" type alerts.</dd>
+<dt><tt><also>...</also></tt></dt><dd>The translated header of the "See Also" type alerts.</dd>
+<dt><tt><todo>...</todo></tt></dt><dd>The translated header of the "To Do" type alerts.</dd>
+<dt><tt><warn>...</warn></tt></dt><dd>The translated header of the "Warning" type alerts.</dd>
+<dt><tt><args>...</args></tt></dt><dd>The translated header of the "Arguments" table (used by the API generator).</dd>
+<dt><tt><rval>...</rval></tt></dt><dd>The translated header of the "Return Value" table (used by the API generator).</dd>
+<dt><tt><prev>...</prev></tt></dt><dd>The translated label on the previous page button on the bottom.</dd>
+<dt><tt><next>...</next></tt></dt><dd>The translated label on the next page button on the bottom.</dd>
+<dt><tt><copy>...</copy></tt></dt><dd>Finally, the content of the copyright label at the bottom.</dd>
+</dl>
+<p>For example:</p>
+<pre>
+<doc>
+    <titleimg>logo.png gendoc</titleimg>
+    <title>documentation</title>
+    <url>https://bztsrc.gitlab.io/gendoc</url>
+    <version>1.0.0</version>
+    <theme>theme.css</theme>
+    <lang>en</lang>
+    <rslt>Search Results</rslt>
+    <home>Home</home>
+    <link>Permalink to this headline</link>
+    <info>Important</info>
+    <hint>Hint</hint>
+    <note>Note</note>
+    <also>See Also</also>
+    <todo>To Do</todo>
+    <args>Arguments</args>
+    <rval>Return Value</rval>
+    <warn>Warning</warn>
+    <prev>Previous</prev>
+    <next>Next</next>
+    <copy>2022 bzt (bztsrc@gitlab)</copy>
+</doc>
+</pre>
+<note>If both <tt><titleimg></tt> and <tt><title></tt> is given, then the actual title is concatenated from the alt text and the
+<tt><title></tt> tag, therefore will be "gendoc documentation" in the above example.</note>
+<h2>Table of Contents</h2>
+<p>The following tags influences how the TOC on the left is generated. These tags are</p>
+<dl>
+<dt><tt><cap>...</cap></tt></dt><dd>which adds a caption to the TOC, and the</dd>
+<dt><tt><h1>...</h1></tt>, <tt><h2>...</h2></tt>, up to <tt><h6>...</h6></tt></dt><dd>heading tags.</dd></dl>
+<p>The <tt><h1></tt> tag opens a new page. Other sub-headings add sections to that page. The links and urls are automatically
+generated from the heading's text, but just in case the generated name doesn't suit your needs, you can specify the label id
+by hand with <tt><h1 (id)></tt>, <tt><h2 (id)></tt>, <tt><h3 (id)></tt> etc.</p>
+<p>For example:</p>
+<pre>
+<h1>Simple Heading</h1>                    (will use "simple_heading" as label)
+<h1 my_specific_label>Another Heading</h1> (will use "my_specific_label")</pre>
+<h3>The Welcome Page</h3>
+<p>You can enclose the first, and exactly one <tt><h1></tt> tag with its subheadings in a</p>
+<dl><dt><tt><hello>...</hello></tt></dt><dd>Encloses the welcome headings and sections</dd></dl>
+<p>These headings will then be excluded from the Table of Contents, and in return will be shown as a welcome page. Also the
+"Home" link in the breadcrumbs navigation above will lead to this page instead of the first entry in the TOC.</p>
+<h2>Include Source Document</h2>
+<dl>
+<dt><tt><include (filename)></tt></dt><dd>This tag includes another source document just as if it were given on
+the command line.</dd>
+</dl>
+<h2>Security Considerations</h2>
+<p>None. It is assumed that Alice needs a documentation, so Alice writes the input files and Alice runs <b>gendoc</b> on her
+<i>local</i> computer, and hopefully Alice doesn't want to hack Alice (maybe if she is schizofrenic?). In short, there's only
+one party in the generation process.</p>
+<p>Then Bob receives the generated static HTML only, and Bob has no access to the input files and does not run <b>gendoc</b>
+nor gets he involved with the documentation generation process in any way. All he gets is the final static product.</p>
+<p>If Alice uploads the documentation to a server, that's not an issue either, because <b>gendoc</b> has absolutely no server
+component parts. Bob will download the documentation to his local computer (probably into his browser's local cache), and the
+search runs only on Bob's local computer. If Bob tries to hack the search, he will only get bad search results on his own
+computer, but won't influence Cecil or other document readers.</p>
+
+<h1>Formatting</h1>
+<p>The second category is for the tags that you use to format the document. <b>gendoc</b> liftens the burden of modern web from
+your shoulders, eases your mind from the madness of stylesheets and context-neutral tags, and you can use simple tags just the
+way as Sir Burners Lee originally intended.</p>
+<p>In a well-formated source document <b>no other tags</b> than listed here should exists (forget <tt><span>,<div></tt> etc.).
+But to provide backward compatibility with HTML, this isn't enforced by the generators, all tags that are not recognized by
+<b>gendoc</b> are copied verbatim to the final documentation (with a warning).</p>
+<warn>Don't let the resemblence fool you! <b>gendoc</b> tags aren't HTML tags, they just look like it to shorten your learning curve significantly.</warn>
+<warn>As soon as you write your first tag attribute, then you can be sure that you're doing it wrong.</warn>
+<p>All tags have a corresponding closing tag, except <tt><include></tt>, <tt><api></tt>, <tt><br></tt>, <tt><mb*></tt> and <tt><img*></tt>
+(where '*' can be <tt>l,r,w</tt>). This is validated and errors are reported for each section individually.</p>
+<h2>Styling Texts</h2>
+<dl>
+<dt><tt><h1>...</h1></tt>, <tt><h2>...</h2></tt>, up to <tt><h6>...</h6></tt></dt><dd>To style text as a heading.</dd>
+<dt><tt><b>...</b></tt></dt><dd>Makes the text <b>bold</b>.</dd>
+<dt><tt><i>...</i></tt></dt><dd>Makes the text <i>italic</i> (or oblique).</dd>
+<dt><tt><u>...</u></tt></dt><dd>Makes the text <u>underlined</u>.</dd>
+<dt><tt><s>...</s></tt></dt><dd>Makes the text <s>striked-through</s>.</dd>
+<dt><tt><sup>...</sup></tt></dt><dd>Makes the text <sup>superscript</sup>.</dd>
+<dt><tt><sub>...</sub></tt></dt><dd>Makes the text <sub>subscript</sub>.</dd>
+<dt><tt><tt>...<</tt><tt>/tt></tt></dt><dd>Makes the text to use <tt>monospace font</tt>. It also disables
+interpretation of tags inside. All the tags you can see on this page are printed with <tt><tt></tt>. (You do not need to know
+what <tt>&lt;</tt> and <tt>&gt;</tt> are and what the hell is that <tt>&amp;lt;</tt> doing there...)</dd>
+<dt><tt><quote>...</quote></tt></dt><dd>Makes the text a <quote>quote, don't think you'll need this in a documentation, but just in case.</quote></dd>
+</dl>
+<h2>Structuring Texts</h2>
+<dl>
+<dt><tt><p>...</p></tt></dt><dd>You wrap your paragraphs in, well, paragraphs. This element has no visual, it just separates blocks
+of text. If you have displaying issues, try wrapping the text in a paragraph.</dd>
+<dt><tt><br></tt></dt><dd>Break line. Use only if you really really have to. This tag has no closing pair.</dd>
+<dt><tt><ol>...</ol></tt>, <tt><ul>...</ul></tt>, <tt><li>...</li></tt></dt><dd>Ordered <tt><ol>...</ol></tt> and unordered <tt><ul>...</ul></tt> lists. Both are enclosing
+list item <tt><li>...</li></tt> tags. Do not want to have fancy list bullets, those are extremely annoying for documentation
+readers.
+<grid><gr>
+<gd><ol><li>one<ol><li>one and a half</li></ol></li><li>two</li></ol></gd>
+<gd><ul><li>one<ul><li>one and a half</li></ul></li><li>two</li></ul></gd></gr></grid></dd>
+<dt><tt><dl>...</dl></tt>, <tt><dt>...</dt></tt>, <tt><dd>...</dd></tt></dt><dd>Data blocks, like this one you're reading now. The list is enclosed in <tt><dl>...</dl></tt>
+tags, and contains multiple topics and descriptions. The topic is in <tt><dt>...</dt></tt>, and the description is in
+<tt><dd>...</dd></tt>.</dd>
+<dt><tt><grid>...</grid></tt>, <tt><gr>...</gr></tt>, <tt><gd>/<gD>...</gd></tt></dt><dd>The grid rows <tt><gr>...</gr></tt> are enclosed in <tt><grid>...</grid></tt>
+tags. Each row contains one or more <tt><gd></tt> grid cells. It looks like and works like an invisible table with equal sized cells. The upper-case
+<tt><gD></tt> opening tag makes the cell wide.</dd>
+<dt><tt><table>...</table></tt>, <tt><tr>...</tr></tt>, and <tt><th>/<tH>, <td>/<tD>, <tn>/<tN></tt></dt><dd>The table rows <tt><tr>...</tr></tt> are enclosed in <tt><table>...</table></tt>
+tags. Each row contains one or more table cells. Here <tt><th>...</th></tt> formats as header, <tt><tH>...</th></tt> as wide-header (looks the same
+as header, but scretches the coloumn wide). The <tt><td>...</td></tt> is for table data and makes the cell left-aligned, but if you need
+right-alignment (like for decimal numbers), use <tt><tn>...</tn></tt>. If you don't have headers, but you need wide cells, then
+you can use the upper-case opening variants, like <tt><tD></tt> and <tt><tN></tt> to scretch cells.
+<table>
+    <tr><th>Sample header 1</th><tH>Sample header 2</th><th>Sample header 3</th></tr>
+    <tr><td>Sample data 1</td><td>Sample data 2</td><tn>Sample data 3</tn></tr>
+    <tr><td>Sample data 4</td><td>Sample data 5</td><tn>Sample data 6</tn></tr>
+</table>
+</dd></dl>
+<h2>Preformatted Text</h2>
+<dl>
+<dt><tt><pre>...</pre></tt></dt><dd>Just like <tt><tt></tt>, changes font to monospace and disables tag parsing, but what's more it provides an
+optionally scrollable area around the text. <tt><pre></tt> is for any text or program output or command line samples.
+<pre>This is an example
+   pre-formatted text with
+  multiple lines and which is very very long, so long that it does not fit into the screen and a scrollbar should appear.</pre></dd>
+<dt><tt><hl>...</hl>, <hm>...</hm></tt></dt><dd>Highlights parts of <tt><pre></tt> (and <tt><code></tt>) blocks. Use <tt><hl></tt>
+to highlight something, or <tt><hm></tt> to hightlight entire, multiple lines.<pre>This is an example
+   pre-formatted text which <hl>has
+   some highlighted</hl> text,
+      and even
+<hm>some highlighted
+ entire
+ lines
+</hm>as an example
+</pre></dd>
+</dl>
+<h2>Source Code</h2>
+<dl>
+<dt><tt><code>...</code>,<code (lang)>...</code></tt></dt><dd>Just like <tt><pre></tt>, provides scrollbars, etc.,
+but <tt><code></tt> should contain program source code which will be syntax highlighted. By default it uses a generic highlighter,
+but you can add rules to specific languages with <a>plugins</a> and specify the language like <tt><code c>,<code php>,<code python></tt> etc.
+Inside the code block, you can use <tt><hl>...</hl></tt> and <tt><hm>...</hm></tt> to manually hightlight some part of the code
+("World" inside a string literal in this example):
+<code c>
+#include <stdlib.h>
+/* comment1
+   multiline */
+// single line comment2
+int main(int argc, char **argv)
+{
+    volatile static int i, a = 0xff, b = -1ULL;
+    wchar_t c = L'\e', *d = L"wide string";
+    float e = 1.0f, f = .5, g = -1e10;
+
+    for(i = 0; i < 128; i++)
+        a += b->c;
+
+    printf("Hello <hl>World</hl>!\n");
+}
+</code></dd>
+<dt><tt><api (lang) (filename)></tt></dt><dd><p>This tag generates a simple API documentation for a source file written
+in the specified programming language. The default formatting is pretty basic, but it supports any language that accepts C-style
+multiline comments (that is, C, C++, PHP, JavaScript, Java, Go, Rust etc.). Furthermore, you can use <a>plugins</a> to add
+custom formatting and to support any programming language or doctype standard.</p><p>For an example, see this documentation's
+<a>API</a> section.</p></dd>
+</dl>
+<h2>Links</h2>
+<p>There are two kinds of links in the document:</p>
+<dl>
+<dt><tt><a>...</a></tt></dt><dd>Creates an internal link to one of the headings, for example <tt><a>Getting Started</a></tt>
+looks like this: <a>Getting Started</a>. Internal links always open in the same tab as the document.</dd>
+<dt><tt><a (url)>...</a></tt></dt><dd>External link. These open a new tab, except when url starts with a `#`.</dd>
+</dl>
+<h2>User Input</h2>
+<p>In a software documentation it is very common that you have to explain how user input is done. <b>gendoc</b> helps you with that
+a lot.</p>
+<dl>
+<dt><tt><ui1>...</ui1></tt>, <tt><ui2>...</ui2></tt>, up to <tt><ui6>...</ui6></tt></dt><dd>These do nothing in particular, but you can style them from the theme to mimic your software's user interface elements. For example: "set the checkbox and then click on the <ui1>Save</ui1> button".</dd>
+<dt><tt><kbd>...</kbd></tt></dt><dd>This is used to represent keyboard buttons, like <tt><kbd>Ctrl</kbd></tt> + <tt><kbd>C</kbd></tt> looks like <kbd>Ctrl</kbd> + <kbd>C</kbd>.</dd>
+<dt><tt><mbl>, <mbr>, <mbw></tt></dt><dd>Represents mouse buttons and wheel. These tags has no closing pair, they are like images.
+The <tt><mbl></tt> looks like <mbl>, the right button <tt><mbr></tt> like <mbr>, and the wheel <tt><mbw></tt> like <mbw>. Originally I wanted to use
+UNICODE "upper left quadrant" and "upper right quadrant" glyphs with a gradient background and round border, but some fonts (*khm* FreeSans)
+has those incorrectly swapped, and it displayed very differently with different fonts (not sure why, <tt><kbd></tt> is quite consistent and so where the mouse wheel with U+2579).
+Anyway this looks better, but depending on browsers might be a few pixels vertically off in conjunction with <tt><kbd></tt>, like<br><kbd>Alt</kbd> + <mbl>.</dd>
+</dl>
+<h2>Images</h2>
+<dl>
+<dt><tt><imgt (filename)></tt></dt><dd>Insert an image <imgt gplv3.png> into the document as inlined <b>text</b>. The filename is a path relative to the source document. The image tags have no closing pair.<br></dd>
+<dt><tt><imgl (filename)></tt></dt><dd><imgl gplv3.png>Insert an image into the document which is aligned on the <b>left</b> and floated around
+with text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex commondo consequat.<br></dd>
+<dt><tt><imgr (filename)></tt></dt><dd><imgr gplv3.png>Insert an image into the document which is aligned on the <b>right</b> and floated around
+with text. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex commondo consequat.<br></dd>
+<dt><tt><imgc (filename)></tt></dt><dd>Insert an image into the document which is <b>center</b>ed and <b>not</b> floated around with text.<imgc gplv3.png>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</dd>
+<dt><tt><imgw (filename)></tt></dt><dd>Insert a <b>wide</b> image into the document which is centered and <b>not</b> floated around with text.<imgw gplv3.png><fig>Figure: GPLv3+ logo (sorry about the quality of the image)</fig>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</dd>
+<dt><tt><fig>...</fig></tt></dt><dd>Sets the image's caption, like <tt><imgw figure.png><fig>Figure: blah blah</fig></tt>.</dd>
+</dl>
+<h2>Alert Boxes</h2>
+<p>For these boxes, the header's text can be defined in the <tt><doc></tt> tag.</p>
+<dl>
+<dt><tt><hint>...</hint></tt></dt><dd>Creates a hint box, like this one:<hint>This is a hint</hint></dd>
+<dt><tt><info>...</info></tt></dt><dd>Creates an informational box, like this one:<info>This is an important information</info></dd>
+<dt><tt><note>...</note></tt></dt><dd>Creates a note box, like this one:<note>This is a note</note></dd>
+<dt><tt><also>...</also></tt></dt><dd>Creates a see also box, like this one:<also>A good movie. You have played with the computer too much.</also></dd>
+<dt><tt><warn>...</warn></tt></dt><dd>Creates a warning box, like this one:<warn>This is a warning</warn></dd>
+<dt><tt><todo>...</todo></tt></dt><dd>Creates a to do box, like this one:<todo>You probably should never use this, finish your code instead.</todo></dd>
+</dl>
+
+<h1>MarkDown</h1>
+<p>You can choose to use MarkDown for your source format. For that, use the <tt>.md</tt> extension on your input files. The
+ANSI C version has a built-in parser, the PHP version needs a plugin. In both cases, you can mix simple MarkDown with
+<b>gendoc</b> tags (not HTML), like <tt><mbl></tt>, <tt><imgl></tt> etc.</p>
+<note>Use the <tt><doc></tt> tag just like you would with the XML format to specify the meta data.</note>
+<h2 md_toc>Table of Contents</h2>
+<p>Uses standard MD, lines underlined with equal sign <tt>=</tt> will make <tt><h1></tt> headings, the hypen <tt>-</tt> will make
+<tt><h2></tt> headings. You can also use the hashmark <tt>#</tt> prefix, where the number of hashmarks sets the heading's level
+(from one to six).</p><pre>
+Heading 1
+=========
+
+Heading 2
+---------
+
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+</pre>
+<h2 md_style>Styling Texts</h2>
+<p>These are not really MD standard.</p>
+<dl>
+<dt><tt>** ... **</tt></dt><dd>Makes the text <b>bold</b>.</dd>
+<dt><tt>* ... *</tt></dt><dd>Makes the text <i>italic</i> (or oblique).</dd>
+<dt><tt>_ ... _</tt></dt><dd>Makes the text <u>underlined</u>.</dd>
+<dt><tt>~ ... ~</tt></dt><dd>Makes the text <s>striked-through</s>.</dd>
+<dt><tt>^^ ... ^^</tt></dt><dd>Makes the text <sup>superscript</sup>.</dd>
+<dt><tt>,, ... ,,</tt></dt><dd>Makes the text <sub>subscript</sub>.</dd>
+<dt><tt>` ... `</tt></dt><dd>Makes the text to use <tt>monospace font</tt>.</dd>
+<dt><tt>> ...</tt></dt><dd>Lines staring with <tt>></tt> are groupped together and presented as a quote.<pre>> this is a quote
+> this also belongs to the same quote
+> I don't think you'll need this in a documentation</pre></dd>
+</dl>
+<h2 md_struct>Structuring Texts</h2>
+<dl>
+<dt>Empty lines</dt><dd>Empty lines start and end a paragraph.</dd>
+<dt>Two spaces at the end of the line</dt><dd>Break line. Use only if you really really have to.</dd>
+<dt>Lists with <tt>* ...</tt>, <tt>- ...</tt>, <tt>+ ...</tt>, <tt>1. ...</tt></dt><dd>Ordered and unordered lists. Can be nested.
+<grid><gr><gd><pre>* unordered list 1
+* unordered list 2
+* unordered list 3</pre></gd>
+<gd><pre>- unordered list 1
+- unordered list 2
+- unordered list 3</pre></gd>
+<gd><pre>1. ordered list 1
+2. ordered list 2
+3. ordered list 3</pre></gd></gr>
+</grid>
+</dd>
+<dt>Tables</dt><dd>Again, almost standard, looks like:<pre>
+| Sample header 1 | Sample header 2 | Sample header 3 |
+|-----------------|-----------------|----------------:|
+| Sample data 1   | Sample data 2   |   Sample data 3 |
+| Sample data 4   | Sample data 5   |   Sample data 6 |
+</pre>In the second line if there's a double-punct colon (like <tt>|----:|</tt>), then that coloumn will be right aligned (no matter where the
+<tt>:</tt> located). In addition to MD, if it contains an asterisk <tt>*</tt> on the left (like <tt>|*----|</tt>), then it will make
+a wide data cell, if its on the right (like <tt>|----*|</tt>), then a wide number cell (so location matters).</dd></dl>
+<h2 md_pre>Preformatted Texts</h2>
+<dl>
+<dt><tt>``` ... ```</tt></dt><dd>Just like <tt>` ... `</tt>, also changes font to monospace and disables tag parsing, but what's more it provides an
+optionally scrollable area around the text. This is for any text or program output or command line samples.</dd>
+</dl>
+<h2 md_code>Source Code</h2>
+<dl>
+<dt><tt>```</tt>(lang) <tt>... ```</tt></dt><dd>Just like <tt>```</tt>, provides scrollbars, etc., but it should contain program source code
+which will be syntax highlighted. By default it uses a generic highlighter, but you can add rules to specific languages with <a>plugins</a>
+and specify the language like <tt>```c, ```php, ```python</tt> etc. Inside the code block, you can use <tt><hl>...</hl></tt> and
+<tt><hm>...</hm></tt> to manually hightlight some part of the code.</dd>
+</dl>
+<h2 md_links>Links</h2>
+<p>There are two kinds of links in the document:</p>
+<dl>
+<dt><tt>[(text)]</tt></dt><dd>Creates an internal link to one of the headings, for example <tt>[Getting Started]</tt>
+looks like this: <a>Getting Started</a>. Internal links always open in the same tab as the document.</dd>
+<dt><tt>[(text)]((url))</tt></dt><dd>External link. These open a new tab, except when url starts with a `#`.</dd>
+</dl>
+<h2 md_images>Images</h2>
+<dl>
+<dt><tt>![(text description)]((filename))</tt></dt><dd>Insert a <b>wide</b> image with image caption into the document which is
+centered and <b>not</b> floated around with text. (For more control, you can use the <tt><imgt></tt>, <tt><imgl></tt> etc. tags).</dd>
+</dl>
+<h2 md_alerts>Alert Boxes</h2>
+<p>Standard paragraphs which start with one of the following strings are converted into alert boxes.</p>
+<dl>
+<dt><tt>HINT:</tt></dt><dd>Converts paragraph into a hint box.</dd>
+<dt><tt>INFO:</tt></dt><dd>Converts paragraph into an informational box.</dd>
+<dt><tt>NOTE:</tt></dt><dd>Converts paragraph into a note box.</dd>
+<dt><tt>SEE ALSO:</tt>, <tt>ALSO:</tt></dt><dd>Converts paragraph into a  see also box.</dd>
+<dt><tt>WARNING:</tt>, <tt>WARN:</tt></dt><dd>Converts paragraph into a warning box.</dd>
+<dt><tt>TODO:</tt></dt><dd>Converts paragraph into a to do box, do not use, rather finish your code.</dd>
+</dl>
+
+<cap>Intermediate</cap>
+<h1>Customizing Theme</h1>
+<p>Now this part is really much simpler than with Sphinx and ReadtheDocs. Unlike with those, here the logic and the look'n'feel
+are truly separated. Yes, I know that RtD has two stylesheet references, but look at the <tt>.css</tt> files! The main css has
+color codes in it, and the theme css is full of setting margins, paddings, overflows, displays etc. That will not do!</p>
+<hint>In <b>gendoc</b> all the navigation logic is implemented in CSS. No JavaScript is needed!</hint>
+<h2>The Theme Tag</h2>
+<p>First of all, you specify the theme with the <tt><doc></tt>'s tag <tt><theme>...</theme></tt> sub-tag. This should contain
+a filename relative to the source document.</p>
+<h2>The Theme CSS</h2>
+<p>Although the CSS is a valid stylesheet, it only includes just a few, specific DOM selectors with only theming attributes.</p>
+<table>
+<tr><th>DOM Selector</th><th>Description</th></tr>
+<tr><td><tt>hr,table,th,td</tt></td><td>Set the border's color and the table header's background color if you want to.</td></tr>
+<tr><td><tt>tr</tt></td><td>Set altering row background colors.</td></tr>
+<tr><td><tt>a</tt></td><td>Set the color and decoration for links.</td></tr>
+<tr><td><tt>.content</tt></td><td>Change the entire documentation's overall default font color and font family here.</td></tr>
+<tr><td><tt>.title</tt></td><td>Change the look of the big area on the top left.</td></tr>
+<tr><td><tt>.title, .home,</tt><br><tt>h1>a,h2>a,h3>a,</tt><br><tt>h4>a,h5>a,h6>a</tt></td><td>You should set the same background color for these for a good looking theme.</td></tr>
+<tr><td><tt>.search</tt></td><td>Change the colors of the search input box.</td></tr>
+<tr><td><tt>.nav</tt></td><td>Change the font color and background color of the navigation bar.</td></tr>
+<tr><td><tt>.nav p</tt></td><td>The TOC caption selector. Also sets the look of the "Search Results" caption.</td></tr>
+<tr><td><tt>.nav label</tt></td><td>Inactive top level TOC entry</td></tr>
+<tr><td><tt>.nav .current</tt></td><td>The active top level TOC entry</td></tr>
+<tr><td><tt>.nav a</tt></td><td>Search result TOC entry</td></tr>
+<tr><td><tt>.nav li>ul>li</tt></td><td>Background of sub-levels</td></tr>
+<tr><td><tt>.nav li>ul>li>a</tt></td><td>Foreground of sub-levels</td></tr>
+<tr><td><tt>.pre</tt></td><td>Background and border of the preformatted blocks</td></tr>
+<tr><td><tt>.info, .hint, .warn</tt></td><td>Change the alert boxes' background color.</td></tr>
+<tr><td><tt>.info>p:firstchild</tt></td><td>The alert boxes' header, change the background color.</td></tr>
+<tr><td><tt>.btn</tt></td><td>The style of the "Previous" and "Next" buttons at the bottom.</td></tr>
+<tr><td><tt>.ui1, .ui2, .ui3,</tt><br><tt>.ui4, .ui5, .ui6</tt></td><td>You can use these classes to mimic your software user interface's input elements, like buttons for example.</td></tr>
+</table>
+<p>That's about it. This list covers all the important and changeable selectors of the theme CSS. Isn't that too much, right?</p>
+<warn>NEVER change the logic from a theme CSS, like setting "display", "position" etc. attributes! Only change the background
+color, border color, font color, font family, font size etc.</warn>
+<h2>Syntax Highlight</h2>
+<p>For that, you have to define a few classes in your theme CSS. There's really only a few, these classes are generic to all
+languages:</p>
+<table>
+<tr><th>Class</th><th>Description</th></tr>
+<tr><td><tt>.hl_h</tt></td><td>Manually highlighted part.</td></tr>
+<tr><td><tt>.hl_c</tt></td><td>Syntax highlight comment.</td></tr>
+<tr><td><tt>.hl_p</tt></td><td>Syntax highlight pseudo element (like precompiler directives, could be the same as comments).</td></tr>
+<tr><td><tt>.hl_o</tt></td><td>Syntax highlight operator.</td></tr>
+<tr><td><tt>.hl_n</tt></td><td>Syntax highlight number literal.</td></tr>
+<tr><td><tt>.hl_s</tt></td><td>Syntax highlight string literal.</td></tr>
+<tr><td><tt>.hl_t</tt></td><td>Syntax highlight type.</td></tr>
+<tr><td><tt>.hl_k</tt></td><td>Syntax highlight keyword.</td></tr>
+<tr><td><tt>.hl_f</tt></td><td>Syntax highlight function.</td></tr>
+<tr><td><tt>.hl_v</tt></td><td>Syntax highlight variable.</td></tr>
+</table>
+<h2>Theme Example</h2>
+<pre>
+hr,table,th,td{border-color:#e1e4e5;}
+th{background:#d6d6d6;}
+tr:nth-child(odd){background:#f3f6f6;}
+a{text-decoration:none;color:#2980B9;}
+.content{background:#fcfcfc;color:#404040;font-family:Helvetica,sans-serif;}
+.title,.home,h1>a,h2>a,h3>a,h4>a,h5>a,h6>a{background:#2980B9;color:#fcfcfc;}
+.version{color:rgba(255,255,255,0.3);}
+.search{border:1px solid #2472a4;background:#fcfcfc;}
+.nav{background:#343131;color:#d9d9d9;}
+.nav p{color:#55a5d9;}
+.nav label:hover,.nav a:hover{background:#4e4a4a;}
+.nav .current{background:#fcfcfc;color:#404040;}
+.nav li>ul>li{background:#e3e3e3;}
+.nav li>ul>li>a{color:#404040;}
+.nav li>ul>li>a:hover{background:#d6d6d6;}
+.pre {border:1px solid #e1e4e5;background:#f8f8f8;}
+.info{background:#e7f2fa;}
+.info>p:first-child{background:#6ab0de;color:#fff;}
+.hint{background:#dbfaf4;}
+.hint>p:first-child{background:#1abc9c;color:#fff;}
+.warn{background:#ffedcc;}
+.warn>p:first-child{background:#f0b37e;color:#fff;}
+.btn{background:#f3f6f6;}
+.btn:hover{background:#e5ebeb;}
+.ui1{font-family:Serif;font-size:12px;border-radius:3px;background:#cfcfcf;}
+.hl_h{background-color:#ccffcc;}
+.hl_c{color:#808080;font-style:italic;}
+.hl_p{color:#1f7199;}
+.hl_o{color:#404040;}
+.hl_n{color:#0164eb;}
+.hl_s{color:#986801;}
+.hl_t{color:#60A050;}
+.hl_k{color:#a626a4;}
+.hl_f{color:#2a9292;}
+.hl_v{color:#e95649;}
+</pre>
+<h1>Plugins</h1>
+<p>Plugins are located in the same directory as the gendoc.php file, under the "<tt>plugins</tt>" sub-directory. The ANSI C version
+also checks the "<tt>/usr/share/gendoc/plugins</tt>" directory. They are named consistently, with a prefix that tells what kind of plugin that is.</p>
+<note>The similarity between File Reader and Writer Plugins isn't a coincidence: the same File Format Plugin can implement
+both reader and writer functionalities.</note>
+<h2>Syntax Highlighter Plugins</h2>
+<p>Named as <tt>plugins/hl_(lang).json</tt>, for example <tt>plugins/hl_python.json</tt>.</p>
+<p>Used by both the ANSI C version and the PHP version. The generic highlighter works pretty well with any programming language
+(worst case scenario, some language keywords or special operators are highlighted as a variable). But just in case you need some
+language specific stuff, you can add rules with these plugins. These files should contain an <a https://www.ietf.org/rfc/rfc8259.txt>RFC 8259</a>
+compliant JSON string with an array of the following fields:</p>
+<table>
+    <tr><th>Index</th><th>Description</th></tr>
+    <tr><tn>0</tn><td>an array of regexp that match comments</td></tr>
+    <tr><tn>1</tn><td>an array of regexp that match pesudo elements (like precompiler directives)</td></tr>
+    <tr><tn>2</tn><td>an array of regexp that match operators (like <tt>+, -, *, /, >=, =, <=</tt> etc.)</td></tr>
+    <tr><tn>3</tn><td>an array of regexp that match numbers (usually <tt>[0-9]+</tt>, but could match floating point numbers too)</td></tr>
+    <tr><tn>4</tn><td>an array of strings that start and end string literals (usually <tt>", ', `</tt> but could be <tt>L", b'</tt> etc.)</td></tr>
+    <tr><tn>5</tn><td>an array of characters that always separate tokens (usually <tt>{, }, ;</tt> etc.)</td></tr>
+    <tr><tn>6</tn><td>an array of strings that match types (these are keywords, just highlighted differently, like <tt>true, false, nullptr</tt> etc.)</td></tr>
+    <tr><tn>7</tn><td>an array of strings that match keywords (like <tt>function, for, forach</tt> etc.)</td></tr>
+</table>
+<p>Strings are matched case-insensitively, and for compatibility and performance reasons, regular expressions are allowed to contain these rules only (most notably no parenthesis allowed):</p>
+<table>
+    <tr><th>Index</th><th>Description</th></tr>
+    <tr><td><tt>$</tt></td><td>matches end of line</td></tr>
+    <tr><td><tt>.*?</tt></td><td>matches zero or more occurance of any character until the pattern that follows matches (for example <tt>.*?abc</tt> matches anything until <tt>abc</tt> matches)</td></tr>
+    <tr><td><tt>.</tt></td><td>matches any character</td></tr>
+    <tr><td><tt>[(list)]</tt></td><td>matches the characters in the list. List may contain <tt>(start)-(end)</tt> intervals, therefore to match hypen, use <tt>\-</tt></td></tr>
+    <tr><td><tt>[(list)]?</tt></td><td>matches zero or one occurance of the characters in the list</td></tr>
+    <tr><td><tt>[(list)]+</tt></td><td>matches multiple (at least one or more) occurance of the characters in the list</td></tr>
+    <tr><td><tt>[(list)]*</tt></td><td>matches multiple (zero or more) occurance of the characters in the list</td></tr>
+    <tr><td><tt>[^(list)]</tt></td><td>matches any character that's not in the list</td></tr>
+    <tr><td><tt>[^(list)]?</tt></td><td>matches zero or one occurance of any character that's not in the list</td></tr>
+    <tr><td><tt>[^(list)]+</tt></td><td>matches multiple (at least one or more) occurance of any character that's not in the list</td></tr>
+    <tr><td><tt>[^(list)]*</tt></td><td>matches multiple (zero or more) occurance of any character that's not in the list</td></tr>
+</table>
+<p>Note that slash (/) and backslash (\) always has to be escaped. For example:</p>
+<b>plugins/hl_c.json</b><code>
+/* syntax highlight rules for the C language */
+[
+    /* 0 comments */    [ "\/\/.*?$", "\/\*.*?\*\/" ],
+    /* 1 pseudo */      [ "#.*?$" ],
+    /* 2 operators */   [ "->", "[=\<\>\+\-\*\/%&\^\|!:\.][=]?" ],
+    /* 3 numbers */     [ "[0-9][0-9bx]?[0-9\.a-f\+\-]*[UL]*" ],
+    /* 4 strings */     [ "\"", "'", "L\"", "L'" ],
+    /* 5 separators */  [ "[", "]", "{", "}", ",", ";" ],
+    /* 6 types */       [ "char", "short", "int", "long", "float", ... ],
+    /* 7 keywords */    [ "if", "else", "switch", "case", "for", ... ]
+]
+</code>
+<h2>API Documenting Plugins</h2>
+<p>Named as <tt>plugins/api_(lang).php</tt>, for example <tt>plugins/api_python.php</tt>.</p>
+<p>These plugins should implement a single function by the name <tt>gendoc_api_(lang)</tt>, which receives the source file's
+content, parses it for doctype comments and calls various <tt>gendoc::</tt> methods to generate output.</p>
+<p>For example:</p>
+<b>plugins/api_c.php</b><code php>
+<<hl></hl>?php
+/* generate API documentation for the C language */
+function gendoc_api_c($str) {
+    /* get all comments with doctype strings in it */
+    if(preg_match_all("/\/\*\*[^\*](.*?)\*\/[\n](.*?)$/ims", $s, $M, PREG_SET_ORDER)) {
+        gendoc::data_list_open();
+        foreach($M as $m) {
+            gendoc::data_topic_open();
+            gendoc::source_code($m[2], "c");
+            gendoc::data_topic_close();
+            gendoc::data_description_open();
+            /* generate a good-looking output from the comment here */
+            gendoc::data_description_close();
+        }
+        gendoc::data_list_close();
+    }
+}
+</code>
+<h2>Input File Reader Plugins</h2>
+<p>Named as <tt>plugins/fmt_(extension).php</tt>, for example <tt>plugins/fmt_rst.php</tt>.</p>
+<p>These plugins (just like File Writer Plugins) should implement a class by the name <tt>gendoc_(extension)</tt>. For a reader,
+one <b><u><i>static</i></u></b> method is required, called <tt>gendoc_(extension)::parse</tt>, which receives the source
+document's content as string, parses it and calls various <tt>gendoc::</tt> methods to generate output. The file reader plugins
+are responsible for increasing the line number counter in <tt>gendoc::$l</tt> whenever they parse a newline character (required
+for correct error reporting).</p>
+<p>For example:</p>
+<b>plugins/fmt_md.php</b><code php>
+<<hl></hl>?php
+/* MarkDown file format reader plugin */
+class gendoc_md {
+    public static parse($str) {
+        /* do something with the source document in $str
+         * and call gendoc methods to generate output */
+        gendoc::heading(1,
+            "The Hundread Years Old Man Who Climbed Out on the Window and Disappeared");
+        gendoc::heading(2, "Chapter 1");
+        gendoc::paragraph_open();
+        gendoc::text("Lorem ipsum sic dolor amet");
+        gendoc::paragraph_close();
+        gendoc::heading(2, "Chapter 2");
+        /* ... */
+        /* keep the current line counter up-to-date */
+        gendoc::$l++;
+    }
+}
+</code>
+<p>Alternatively if generating the output through calling methods isn't feasable, an Input Reader Plugin could return a string
+with <b>gendoc</b> tags.</p>
+<b>plugins/fmt_ext.php</b><code php>
+<<hl></hl>?php
+/* A file format reader plugin that does not use gendoc:: methods */
+class gendoc_ext {
+    public static parse($str) {
+        /* do something with the source document in $str
+         * and generate output string with gendoc tags */
+        return
+            "<h1>The Hundread Years Old Man Who Climbed Out on the Window and Disappeared</h1>".
+            "<h2>Chapter 1</h2>".
+            "<p>Lorem ipsum sic dolor amet</p>".
+            "<h2>Chapter 2</h2>";
+    }
+}
+</code>
+<warn>This returns <b>gendoc</b> tags, and <i><u>not</u></i> HTML tags.</warn>
+<h2>Output File Writer Plugins</h2>
+<p>Named as <tt>plugins/fmt_(extension).php</tt>, for example <tt>plugins/fmt_md.php</tt>.</p>
+<p>These plugins (just like File Reader Plugins) should implement a class by the name <tt>gendoc_(extension)</tt>. For a writer,
+all methods must be implemented that are marked as "<i>has to be implemented by writer plugins</i>" in the API list below.
+Furthermore, they must instantiate that class and return an instance.</p>
+<p>For example:</p>
+<b>plugins/fmt_pdf.php</b><code php>
+<<hl></hl>?php
+/* PDF file format writer plugin */
+class gendoc_pdf {
+    /* hooks to generate output to this instance */
+    public function heading($level, $id, $name) { /* ... */ }
+    public function paragraph_open() { /* ... */ }
+    public function paragraph_close() { /* ... */ }
+    public function source_code($str, $type = "", $tokens = []) { /* ... */ }
+    /* ... more methods ... */
+    /* output this instance to a file */
+    public function output($fn) {
+        $f = fopen($fn, "wb+");
+        if(!$f) { gendoc::report_error("unable to write file"); die; }
+        /* print out in format */
+        fclose($f);
+    }
+}
+/* this is very important! */
+return new gendoc_pdf;
+</code>
+<p>A little on implementing the <b>source code hook</b>: the plugin gets the source as string in <tt>$str</tt>, but doesn't have
+to parse it on its own, because <b>gendoc</b> also passes the source in a tokenized form as well (the third <tt>$tokens</tt>
+parameter). Here each array element is another array with the following fields:</p>
+<table>
+    <tr><th>Index</th><th>Description</th></tr>
+    <tr><tn>0</tn><td>the type of the token ("" text, "c" comment, "o" operator, "n" number, "s" string, "k" keyword, "t" type, "v" variable, same as in the highlight CSS classes)</td></tr>
+    <tr><tn>1</tn><td>string, the part of the source included in this token</td></tr>
+</table>
+<p>Both for preformatted text and source code the File Format Writer plugin is responsible for handling the <tt><hl></tt> and
+<tt><hm></tt> tags (which are included in the $str input string, no matter the format).</p>
+<hint>Concatenating the 2nd fields in the tokens array should result in the original source code string.</hint>
+<h2>API</h2>
+<p>These methods are used by the plugins. Save a few, which are only implemented in the gendoc class and listed at the beginning,
+the writer plugins have to implement all of these (as non-static functions). Reader plugins have to implement the static <tt>parse</tt>
+method only, but they call these methods in order to generate output.</p>
+<api php ../gendoc.php>
+<h1>Tips and Tricks</h1>
+<h2>The Not Refreshed Issue</h2>
+<p>Some browsers refuse to reload the page if you enter an URL with an anchor label in it (the one after '#'). Besides of typing
+the URL and pressing <kbd>↵ Enter</kbd>, you also have to press an <kbd>F5</kbd> (refresh page). This should not be, but could be
+problematic when linking the documentation from other sources, therefore the generated document also accepts the labels as URL
+query string (after '?' in URL). All browsers think that an URL with a query has to be reloaded. URLs with such a query string are
+transparently redirected to an URL with an anchor variant (which is then fine, because the reload has already happened).</p>
+<h2>No JavaScript</h2>
+<p>Is not a problem. The navigation bar on the left with the TOC will work as expected. So will the "Home" on the top, and
+"Previous" and "Next" links on the bottom. However internal links created using <tt><a></tt> will only work within the same
+page, and they will not switch pages (because of the no-reload with anchors issue explained above, and the workaround requires
+JavaScript).</p>
+
+<cap>Legal section</cap>
+<h1>License</h1>
+<h2>The gendoc Generators</h2>
+<p><imgr gplv3.png>The ANSI C source as well as the PHP script are available under <a https://gitlab.com/bztsrc/gendoc/blob/main/LICENSE>GPLv3+</a>
+or any later version of that license.</p>
+<pre>
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+</pre>
+<h2>The Embedded Icons</h2>
+<p><imgr ccby.png>That few icons embedded into the output originate from public FontAwesome icons and they are licensed
+<a https://github.com/FontAwesome/Font-Awesome/blob/master/LICENSE.txt>CC-BY-4.0</a>.</p>
+<pre>
+You are free to:
+
+ - Share — copy and redistribute the material in any medium or format
+
+ - Adapt — remix, transform, and build upon the material
+     The licensor cannot revoke these freedoms as long as you follow
+     the license terms.
+
+Under the following terms:
+
+ - Attribution — You must give appropriate credit, provide a link to
+     the license, and indicate if changes were made. You may do so in
+     any reasonable manner, but not in any way that suggests the
+     licensor endorses you or your use.
+</pre>
+<h2>The Embedded Style Sheet</h2>
+<p><imgr ccby.png>I would like to say that the embedded CSS is from RtD, but the thruth is, RtD's style was such a mess I had
+to rewrite everything from scratch. So it looks like and feels like the original RtD stylesheet, but it is a complete rewrite from
+ground up, licensed under <b>CC-BY</b>.</p>
+<h2>The Embedded JavaScript</h2>
+<p><imgr ccby.png>That minimal vanilla JavaScript code that gets into the documents (to provide search results) is also licensed
+under <b>CC-BY</b>.</p>
