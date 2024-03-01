@@ -33,7 +33,7 @@ programs:
 		brightnessctl font-jetbrains-mono-nerd yt-dlp mpv \
 		mpv-mpris xclip fzf exfatprogs curl wget htop \
 		bash-completion xdg-utils xdg-user-dirs
-copy-config:
+copy:
 	cp -r .config ~/
 	cp -r .local ~/
 	cp .bash* ~/
@@ -53,7 +53,7 @@ clean:
 	make clean --directory=nsxiv
 	make clean --directory=noice
 	make clean --directory=farbfeld
-install: copy-config compile
+install: copy compile
 	doas make install --directory=dwm
 	doas make install --directory=st
 	doas make install --directory=dmenu
