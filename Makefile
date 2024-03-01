@@ -20,8 +20,8 @@ configure:
 		sx imlib2-dev libxft-dev pango-dev fontconfig-dev \
 		xrdb libexif-dev freetype-dev patch gcc pkgconf \
 		harfbuzz-dev libxcb-dev libx11-dev xcb-util-dev \
-		cairo-dev ncurses g++ libxinerama-dev \
-		xf86-input-synaptics font-jetbrains-mono 
+		cairo-dev ncurses g++ libxinerama-dev libjpeg-turbo-dev \
+		xf86-input-synaptics font-jetbrains-mono libxrandr-dev
 	doas usermod -aG sys $(USER)
 	doas usermod -aG adm $(USER)
 	doas usermod -aG input $(USER)
