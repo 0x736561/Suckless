@@ -14,6 +14,7 @@ compile: clean configure
 	make --directory=nsxiv
 	make --directory=noice
 	make --directory=farbfeld
+
 configure:
 	doas setup-xorg-base
 	doas apk add xorg-server-dev setxkbmap xprop xrandr \
@@ -27,18 +28,21 @@ configure:
 	doas usermod -aG input $(USER)
 	doas usermod -aG audio $(USER)
 	doas usermod -aG video $(USER)
+
 programs:
 	doas apk add vim cmus git zathura zathura-pdf-poppler \
 		zathura-cb alsa-utils playerctl \
 		brightnessctl font-jetbrains-mono-nerd yt-dlp mpv \
 		mpv-mpris xclip fzf exfatprogs curl wget htop \
 		bash-completion xdg-utils xdg-user-dirs
+
 copy:
 	cp -r .config ~/
 	cp -r .local ~/
 	cp .bash* ~/
 	doas mkdir /etc/X11/xorg.conf.d
 	doas cp 99-synaptics-overrides.conf /etc/X11/xorg.conf.d/
+
 clean:
 	make clean --directory=dwm
 	make clean --directory=st
@@ -53,6 +57,7 @@ clean:
 	make clean --directory=nsxiv
 	make clean --directory=noice
 	make clean --directory=farbfeld
+
 install: copy compile
 	doas make install --directory=dwm
 	doas make install --directory=st

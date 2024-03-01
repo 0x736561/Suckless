@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DIR=~/.local/share/wallpapers
-WALL=$(ls ~/.local/share/wallpapers/ | dmenu -c -i -l 20)
+DIR=~/.local/share/walls
+WALL=$(ls ~/.local/share/walls/ | dmenu -c -i -l 20)
 cp $DIR/"${WALL}" ~/.local/share/wp
 bgs $DIR/"${WALL}" &
