@@ -22,12 +22,13 @@ configure:
 		xrdb libexif-dev freetype-dev patch gcc pkgconf \
 		harfbuzz-dev libxcb-dev libx11-dev xcb-util-dev \
 		cairo-dev ncurses g++ libxinerama-dev libjpeg-turbo-dev \
-		xf86-input-synaptics font-jetbrains-mono libxrandr-dev
-	doas usermod -aG sys $(USER)
-	doas usermod -aG adm $(USER)
-	doas usermod -aG input $(USER)
-	doas usermod -aG audio $(USER)
-	doas usermod -aG video $(USER)
+		xf86-input-synaptics font-jetbrains-mono libxrandr-dev elogind
+	doas addgroup $(USER) sys
+	doas addgroup $(USER) adm
+	doas addgroup $(USER) input
+	doas addgroup $(USER) audio
+	doas addgroup $(USER) video
+	doas chsh -s /bin/bash $(USER)
 
 programs:
 	doas apk add vim cmus git zathura zathura-pdf-poppler \
