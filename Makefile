@@ -14,7 +14,7 @@ compile: clean configure
 	make --directory=nsxiv
 	make --directory=noice
 	make --directory=farbfeld
-	make --directory=surf
+	make --directory=surf-browser
 
 configure:
 	doas setup-xorg-base
@@ -61,7 +61,7 @@ clean:
 	make clean --directory=nsxiv
 	make clean --directory=noice
 	make clean --directory=farbfeld
-	make clean --directory=surf
+	make clean --directory=surf-browser
 
 install: configure copy compile
 	doas make install --directory=dwm
@@ -77,6 +77,6 @@ install: configure copy compile
 	doas make install --directory=nsxiv
 	doas make install --directory=noice
 	doas make install --directory=farbfeld
-	doas make install --directory=surf
+	doas make install --directory=surf-browser
 
 
