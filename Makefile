@@ -23,8 +23,8 @@ configure:
 		xrdb libexif-dev freetype-dev patch gcc pkgconf \
 		harfbuzz-dev libxcb-dev libx11-dev xcb-util-dev \
 		cairo-dev ncurses g++ libxinerama-dev libjpeg-turbo-dev \
-		xf86-input-synaptics font-jetbrains-mono libxrandr-dev \ 
-		elogind webkit2gtk-dev gcr-dev
+		xf86-input-synaptics font-jetbrains-mono libxrandr-dev \
+		elogind webkit2gtk-dev gcr-dev glib-dev
 
 	doas addgroup $(USER) sys
 	doas addgroup $(USER) adm
