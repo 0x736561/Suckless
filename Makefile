@@ -58,7 +58,7 @@ clean:
 	make clean --directory=noice
 	make clean --directory=farbfeld
 
-install: copy compile
+install: configure copy compile
 	doas make install --directory=dwm
 	doas make install --directory=st
 	doas make install --directory=dmenu
