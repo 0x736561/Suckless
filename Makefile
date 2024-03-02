@@ -63,7 +63,7 @@ clean:
 	make clean --directory=farbfeld
 	make clean --directory=surf-browser
 
-install: configure copy compile programs
+install: configure copy compile
 	doas make install --directory=dwm
 	doas make install --directory=st
 	doas make install --directory=dmenu
