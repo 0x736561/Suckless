@@ -24,7 +24,8 @@ configure:
 		harfbuzz-dev libxcb-dev libx11-dev xcb-util-dev \
 		cairo-dev ncurses g++ libxinerama-dev libjpeg-turbo-dev \
 		xf86-input-synaptics font-jetbrains-mono libxrandr-dev \ 
-		elogind webkit2gtk-dev gcr-dev glib-dev
+		elogind webkit2gtk-dev gcr-dev
+
 	doas addgroup $(USER) sys
 	doas addgroup $(USER) adm
 	doas addgroup $(USER) input
